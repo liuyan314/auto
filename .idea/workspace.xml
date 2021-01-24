@@ -48,7 +48,7 @@
     <property name="SearchEverywhereHistoryKey" value=".start&#9;null&#9;null" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/aw" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -547,46 +547,14 @@
     <option name="LAST_COMMIT_MESSAGE" value="Failed commit: Default" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="96" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598884422294">
+    <state x="138" y="0" key="CommitChangelistDialog2" timestamp="1611486880161">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="96" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.680@0.0.1280.680" timestamp="1598884422294" />
-    <state x="356" y="141" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1600310503942">
+    <state x="138" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1611486880161" />
+    <state x="142" y="0" key="SettingsEditor" timestamp="1611490767816">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="356" y="141" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1280.680@0.0.1280.680" timestamp="1600310503942" />
-    <state x="421" y="82" key="FileChooserDialogImpl" timestamp="1599614948917">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="421" y="82" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1599614948917" />
-    <state width="1259" height="172" key="GridCell.Tab.0.bottom" timestamp="1601444011600">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1259" height="172" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1601444011600" />
-    <state width="1259" height="172" key="GridCell.Tab.0.center" timestamp="1601444011600">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1259" height="172" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1601444011600" />
-    <state width="1259" height="172" key="GridCell.Tab.0.left" timestamp="1601444011600">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1259" height="172" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1601444011600" />
-    <state width="1259" height="172" key="GridCell.Tab.0.right" timestamp="1601444011600">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1259" height="172" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1601444011600" />
-    <state x="160" y="0" key="SettingsEditor" timestamp="1598539091543">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="160" y="0" key="SettingsEditor/0.0.1280.680@0.0.1280.680" timestamp="1598539091543" />
-    <state x="455" y="154" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1601434755916">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="455" y="154" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.680@0.0.1280.680" timestamp="1601434755916" />
-    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1601440159156">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup/0.0.1280.680@0.0.1280.680" timestamp="1601440159156" />
+    <state x="142" y="0" key="SettingsEditor/0.0.1280.680@0.0.1280.680" timestamp="1611490767816" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
