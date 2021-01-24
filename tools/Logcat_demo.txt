@@ -1,0 +1,2 @@
+title logcat
+adb -s %s shell logcat >%s\%s
