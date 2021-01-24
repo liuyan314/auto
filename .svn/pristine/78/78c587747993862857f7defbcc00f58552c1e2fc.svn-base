@@ -1,0 +1,55 @@
+#-*- coding:utf-8 -*-
+from aw import *
+
+'''
+用例标题:插/拔U盘20次
+预置条件：
+1.U盘下存在有效的歌曲
+2.U盘引线插入board板的1,2脚
+测试步骤：
+1.插入U盘
+2.拔出U盘
+预期结果：
+1.音箱音源显示为U盘
+2.音箱没有音源
+'''
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        print('返回主界面，手机进入libratone应用设备页面')
+        Common(SUBDUT1).goBackHome()
+        Common(SUBDUT1).startActivity(CONST.PKGNAME.LIBRATONE)
+        Libratone(SUBDUT1).enterSpeakerByName()
+
+    def step1(self):
+        print("步骤1.插入U盘")
+        Common(DUT).switchUdiskMode()
+        Common().wait(10)
+        result = LuCI_Net().getProductPlaySource()
+        Logger.info("检测点1：当前音源为U disk")
+        self.assertEqual(result, "U disk")
+
+    def step2(self):
+        print("步骤2.拔出U盘")
+        Common(DUT).switchUdiskMode(bat="Udisk_10s.bat")
+        Checkpoint(SUBDUT1).checkIfNotExist(text="USB")
+
+    def test_step(self):
+        for time in range(1,CONST.LOOP.LOOP20+1):
+            Logger.info("Run %d times"%time)
+            self.step1()
+            self.step2()
+
+    def tearDown(self):
+        print("收尾：设置音箱音量为40%,切换音源为DNLA")
+        Common(SUBDUT1).goBackHome()
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC, timeOut=5)
+        Common(SUBDUT1).clickWhenExist(text=CONST.TEXT.MINE)
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(2)  # wait switch DLNA!
+        QQMusic(SUBDUT1).switchPauseStatus() # click pause button
+        Common(SUBDUT1).goBackHome()
+
+if __name__ == "__main__":
+    unittest.main()

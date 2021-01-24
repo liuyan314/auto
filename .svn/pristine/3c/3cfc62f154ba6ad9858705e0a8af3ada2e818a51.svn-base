@@ -1,0 +1,306 @@
+# -*- coding:utf-8 -*-
+'''
+Created on 2017.06
+@author chubaoliang
+
+'''
+
+
+class LOOP(object):
+    # global LOOP
+    LOOP1 = 1
+    LOOP2 = 2
+    LOOP20 = 20
+    LOOP100 = 100
+    LOOP200 = 200
+
+
+class PKGNAME(object):
+    LIBRATONE_PACKAGE = "com.libratone"
+    LIBRATONE = "com.libratone/.v3.activities.HomeActivity"
+    QQMUSIC = "com.tencent.qqmusic/.activity.AppStarterActivity"
+    SETTINGS = "com.android.settings/com.android.settings.HWSettings"
+    HWAPPMARKET = "com.huawei.appmarket/com.huawei.appmarket.MainActivity"
+
+
+class IP(object):
+    IP = "192.168.3.56"
+
+
+class COLOR(object):
+    PEPPRR_BLACK = "1001"
+    SALTYGRAY = "1002"
+    STEEL_BLUE = "1003"
+    RASPBERRY_RED = "1004"
+    ALMOND_BROWN = "1005"
+    ICY_BLUE = "1006"
+    CLOUDY_GREY = "2001"
+    GRAPHITE_GREY = "2002"
+    VICTORY_RED = "2003"
+    DEEP_LAGOON = "2004"
+
+
+class PLAYBACKCONTROL(object):
+    PLAY = "PLAY"
+    PAUSE = "PAUSE"
+    STOP = "STOP"
+    NEXT = "NEXT"
+    PREV = "PREV"
+    TOGGL = "TOGGL"
+    MUTE = "MUTE"
+    UNMUTE = "UNMUTE"
+
+
+class PLAYBACKCONTROLWITHBTLINEIN(object):
+    PLAY = "0"
+    PAUSE = "2"
+    STOP = "1"
+    NEXT = "3"
+    PREV = "4"
+    TOGGL = "5"
+    MUTE = "2"
+    UNMUTE = "0"
+
+
+class MUSICNAME(object):
+    PREVIOUS_SONG = "暧昧"
+    MIDDLE_SONG = "你还要我怎样"
+    NEXT_SONG = "演员"
+
+
+class UDISKSONGNAME(object):
+    FIRST_SONG = "分手需要练习的"
+    SECOND_SONG = "全部都是你"
+    THIRD_SONG = "All I Can Think About Is You"
+
+
+class TEXT(object):
+    ### Libratone home page ###
+    SOUNDSPACES = "SOUNDSPACES"
+    MYMUSIC = "MY MUSIC"
+    MYCOLLECTION = "MY COLLECTION"
+    MYCOLLECTION_CONTENT = "Add what you want, play it anytime"
+    DOUBANFM = "DOUBAN FM"
+    DOUBANFM_CONTENT = "Your personal music stream"
+    XIMALAYA = "XIMALAYA"
+    XIMALAYA_CONTENT = "Audio novels, podcasts, music and more"
+    BAIDUMUSIC = "BAIDU MUSIC"
+    BAIDUMUSIC_CONTENT = "The music service who knows you the best"
+    KAISHUSTORY = "KAISHU STORY"
+    KAISHUSTORY_CONTENT = "The largest 'Storytelling' brand of China"
+    INTERNETRADIO = "INTERNET RADIO"
+    INTERNETRADIO_CONTENT = "Internet radio stations from around the world"
+
+    ### Libratone home page--menu title ###
+    MENU_MYPROFILE = "MY PROFILE"
+    MENU_PRODUCTMANUAL = "PRODUCT MANUAL"
+    MENU_SUPPORT = "SUPPORT"
+    MENU_LIBRATONEFAMILY = "LIBRATONE FAMILY"
+    MENU_ABOUT = "ABOUT"
+
+    ### Libratone home page--menu title ###
+    MYPROFILE_REGISTER_PRODUCT_TIP = "Register your product will help us to do the troubleshooting and give you better technical support"
+    MYPROFILE_REGISTER_PRODUCT_BEGIN = "REGISTER YOUR\nPRODUCT"
+
+    ### QQ music ###
+    MINE = "我的"
+    MUSIC_MUSEUM = "音乐馆"
+    LOCAL_SONG = "本地歌曲"
+
+
+class ID(object):
+
+    LIBRATONE_TITLE = "com.libratone:id/tv_bar_title"
+    LIBRATONE_BACK = "com.libratone:id/iv_bar_back"
+    ### Libratone home page ###
+    HOME_EMAIL = "com.libratone:id/ivEmail"
+    HOME_WECHAT = "com.libratone:id/ivWechat"
+    REGISTER_NEW_USER_BTN = "com.libratone:id/tvSignUp"
+    USER_LOGIN_BTN = "com.libratone:id/tvSignIn"
+    USER_EMAIL_EDITTEXT = "com.libratone:id/contents"
+    USER_PSWD_EDITTEXT = "com.libratone:id/contents"
+    REGISTER_NEW_USER_NEXT = "com.libratone:id/ll_next"
+    REGISTER_NEW_USER_PSED_HIDE_ICON = "com.libratone:id/ivHide"
+    ### Libratone home page menu###
+    MENU = "com.libratone:id/iv_bar_bird"
+    MENU_PROFILE = "com.libratone:id/llMenuProfile"
+    MENU_MANUAL = "com.libratone:id/llMenuManual"
+    MENU_SUPPORT = "com.libratone:id/llMenuSupport"
+    MENU_LIBRATONE = "com.libratone:id/llMenuLibratone"
+    MENU_ABOAT = "com.libratone:id/llMenuVersion"
+    ADD_ICON = "com.libratone:id/ivSmallSSEmpty2"
+    EXTEND_ICON = "com.libratone:id/ivHide"
+    SHOW_ICON = "com.libratone:id/ivShow"
+
+    QUICK_GUIDE_CLOSE = "com.libratone:id/iv_close"
+    SOUNDSPACES = "com.libratone:id/tvSSHeader"
+
+    UPGRADE_TITLE = "com.libratone:id/txt_title"
+    UPGRADE_NO_UPGRADE = "com.libratone:id/txt_action_2"
+
+    ### Libratone myprofile page###
+    MYPROFILE_PHOTO_ICON = "com.libratone:id/group_panel"
+    MYPROFILE_USER_HEAD = "com.libratone:id/profile_user_head_container"
+    MYPROFILE_LOGOUT = "com.libratone:id/profile_settings_logout"
+    MYPROFILE_CHANGE_PASSWORD = "com.libratone:id/profile_settings_password"
+    MYPROFILE_REGISTER_PRODUCT = "com.libratone:id/profile_settings_registerproduct"
+    MYPROFILE_PHOTO_GALLERY = "com.libratone:id/profile_modify_gallery"
+    MYPROFILE_PHOTO_GALLERY_DONE = "com.libratone:id/btn_done"
+    MYPROFILE_PHOTO_GALLERY_DONE_PROGRESS = "com.libratone:id/progressBar"
+    MYPROFILE_FITSTNAME_EDITTEXT = "com.libratone:id/profile_moidfy_firstname"
+    MYPROFILE_LASTTNAME_EDITTEXT = "com.libratone:id/profile_modify_lastname"
+    MYPROFILE_SAVE_CONTAINER = "com.libratone:id/profile_modify_save_container"
+    MYPROFILE_USER_NAME = "com.libratone:id/profile_user_name"
+    MYPROFILE_REGISTER_PRODUCT_BEGIN = "com.libratone:id/id_profile_registered_begin"
+    MYPROFILE_REGISTER_PRODUCT_TIP = "com.libratone:id/tv_register_tip"
+    MYPROFILE_REGISTER_PRODUCT_IMAGE = "com.libratone:id/my_profile_registered_image"
+    MYPROFILE_REGISTER_PRODUCT_TEXT = "com.libratone:id/my_profile_register_product_text"
+    MYPROFILE_REGISTER_PRODUCT_DETAIL_DATA = "com.libratone:id/my_profile_registered_detail"
+    MYPROFILE_REGISTER_PRODUCT_DETAIL_SN = "com.libratone:id/my_profile_registered_detail1"
+    MYPROFILE_UNREGISTER_PRODUCT_BTN = "com.libratone:id/list_item_ll"
+    MYPROFILE_CHANGE_PASSWORD_CURRENT_PASSWORD = "com.libratone:id/profile_changepassword_current"
+    MYPROFILE_CHANGE_PASSWORD_NEW_PASSWORD = "com.libratone:id/profile_changepassword_new_password"
+
+
+    ###product page###
+    PRODUCT_FIRMWARE_UPDATE = "com.libratone:id/speaker_detail_firmware_update"
+    PRODUCT_PLAYBACK_DETAIL_CENTER = "com.libratone:id/playback_detail_center"
+
+
+
+
+    ### Libratone support page###
+    SUPPORT_CATEGORY_NAME = "com.libratone:id/support_category_name"
+    SUPPORT_CONTACT_US_MSG = "com.libratone:id/contact_mess"
+    SUPPORT_CONTACT_US_BTN = "com.libratone:id/contact_next"
+    SUPPORT_CONTACT_US_SENT_MSG_TEXT = "com.libratone:id/sent_mess"
+    SUPPORT_CONTACT_US_SENT_MSG_DONE = "com.libratone:id/contact_done"
+
+    ALERT_WIDGET = "com.libratone:id/alert_mul"
+    ALERT_BTN_YES = "com.libratone:id/alert_button_yes"
+    ALERT_BTN_NO = "com.libratone:id/alert_button_no"
+
+    POP_HINTS = "com.libratone:id/tv_hints_small"
+
+    BOTTOM_BTN = "com.libratone:id/list_item_ll"
+
+    ### Libratone product page ###
+    PRODUCT_SETTING = "com.libratone:id/speaker_detail_settings"
+    PRODUCT_SETTING_MODE_CONTAINER = "com.libratone:id/mode_container"
+    PRODUCT_SETTING_SN = "com.libratone:id/textserialNum"
+
+    #MOTO UI Grally
+    ICON_MIME = "com.android.documentsui:id/icon_mime"
+
+    ### QQ Music ###
+    QQMUSIC_PLAY_SONG_ICON = "com.tencent.qqmusic:id/b9h"  # Local song icon(left-bottom)
+    QQMUSIC_PLAY_SONG_ARROWHEAD_ICON = "com.tencent.qqmusic:id/bpz"  # The arrowhead on left top in playing song page(can switch DLNA or BT mode page)
+
+    PERMISSION_FRAME = "android:id/button1"
+
+
+
+class KEYCODE(object):
+    ### Android keycode ###
+    KEYCODE_MOVE_END = "123"
+    KEYCODE_DEL = "67"
+
+class TOAST(object):
+    TOAST_TIME = 7
+
+class SERIALNUMBER(object):
+    COM1 = "COM1"
+    COM2 = "COM2"
+    COM3 = "COM3"
+    COM4 = "COM4"
+    COM5 = "COM5"
+    COM6 = "COM6"
+    COM7 = "COM7"
+    COM8 = "COM8"
+    COM9 = "COM9"
+    COM10 = "COM10"
+    COM11 = "COM11"
+    COM12 = "COM12"
+    COM13 = "COM13"
+    COM14 = "COM14"
+    COM15 = "COM15"
+
+class BAUDRATE(object):
+    BAUDRATE9600 = 9600
+    BAUDRATE115200 = 115200
+
+class TOUCHLIGHTING(object):
+    BIRD_ICON_HALF_LIGHT = 420
+    BIRD_ICON_ALL_LIGHT = 375
+    BIRD_ICON_NO_LIGHT = 500
+
+class SETCLICONMAND(object):
+    BUTTON_L = "button l"   # 上一首
+    BUTTON_R = "button r"   # 下一首
+    BUTTON_U = "button u"   # 建组
+    BUTTON_D = "button d"   # 喜爱频道
+    BUTTON_MS = "button ms"  # 短按鸟标
+    BUTTON_ML = "button ml"  # 长按鸟标
+    CLF_C = "clf c"  #清除串口标志
+
+class GETCLICONMAND(object):
+    P = "p"   # 查询电池电量相关
+    P_POWERLEVEL = "bat level percent"   # 电池电量级别百分比
+    P_POWERCHARGE = "get_charge_state"   # 电池充电模式
+    V = "v"   # 版本信息相关
+    V_MCU = "MCU version"   # MCU版本信息
+    V_BT = "bt version"   # BT版本信息
+    V_DSP = "dsp version"   # DSP版本信息
+    V_TOUCH = "touch version"   # TOUCH版本信息
+    B = "b"   # Touch LED状态相关
+    B_T = "t"   # 建组灯状态
+    B_D = "d"   # 喜爱频道灯
+    B_LR = "lr"   # 上下一首键灯
+    B_MFB = "mfb"   # 鸟灯
+    B_C = "c"   # 音量
+
+class TOUCHLEDSTATUS(object):
+    SETGROUP_SLEEP = "71"  # 建组灯休眠灯灭
+    SETGROUP_LIGHT = "72"  # 建组灯正常亮
+    SETGROUP_FLASH = "73"  # 建组灯闪烁亮
+    FAVORITY_SELLP = "75"  # 喜爱频道休眠时灯灭
+    FAVORITY_LIGHT_FULL = "76"  # 喜爱频道100%亮
+    FAVORITY_LIGHT_HALF = "77"  # 喜爱频道50%亮
+    FAVORITY_LIGHT_FLASH = "78"  # 喜爱频道闪烁亮
+    LR_SELLP = "44"  # 上/下一首休眠灯灭
+    # LR_LIGHT_ONE = "46"  # 上/下一首亮一个   不确定
+    # LR_LIGHT_TWO = "48"  # 上/下一首亮两个   不确定
+    MFB_SELLP = "51"   # 鸟灯休眠灯灭
+    MFB_LIGHT_FULL = "52"   # 鸟灯100%亮
+    MFB_LIGHT_HALF = "53"   # 鸟灯50%亮
+    MFB_LIGHT_BREATHE = "54"   # 鸟灯呼吸
+    C_NONE = "0"   # 音量灯不显示<当音量不为0时>
+    C_FLASH = "1"   # 音量灯闪烁<音量调节到最小时，即5%>
+    C_VOLUME_1 = "2"   # 音量灯调节显示<音量调节到10%>
+    C_VOLUME_2 = "3"   # 音量灯调节显示<音量调节到15%>
+    C_VOLUME_3 = "4"   # 音量灯调节显示<音量调节到20%>
+    C_VOLUME_4 = "5"   # 音量灯调节显示<音量调节到25%>
+    C_VOLUME_5 = "6"   # 音量灯调节显示<音量调节到30%>
+    C_VOLUME_6 = "7"   # 音量灯调节显示<音量调节到35%>
+    C_VOLUME_7 = "8"   # 音量灯调节显示<音量调节到40%>
+    C_VOLUME_8 = "9"   # 音量灯调节显示<音量调节到45%>
+    C_VOLUME_9 = "10"   # 音量灯调节显示<音量调节到50%>
+    C_VOLUME_10 = "11"   # 音量灯调节显示<音量调节到55%>
+    C_VOLUME_11 = "12"   # 音量灯调节显示<音量调节到60%
+    C_VOLUME_12 = "13"   # 音量灯调节显示<音量调节到65%>
+    C_VOLUME_13 = "14"   # 音量灯调节显示<音量调节到70%>
+    C_VOLUME_14 = "15"   # 音量灯调节显示<音量调节到75%>
+    C_VOLUME_15 = "16"   # 音量灯调节显示<音量调节到80%>
+    C_VOLUME_16 = "17"   # 音量灯调节显示<音量调节到85%>
+    C_VOLUME_17 = "18"   # 音量灯调节显示<音量调节到90%>
+    C_VOLUME_18 = "19"   # 音量灯调节显示<音量调节到95%>
+    C_VOLUME_19 = "20"   # 音量灯调节显示<音量调节到100%>
+    C_SLEEP = "21"   # 音量灯休眠全灭
+    C_SETUP = "23"   # 鸟灯进入1:1模式
+    C_FAVORITY_1_LIGHT = "25"   # 喜爱频道1灯亮
+    C_FAVORITY_2_LIGHT = "26"   # 喜爱频道2灯亮
+    C_FAVORITY_3_LIGHT = "27"   # 喜爱频道3灯亮
+    C_FAVORITY_4_LIGHT = "28"   # 喜爱频道4灯亮
+    C_FAVORITY_5_LIGHT = "29"   # 喜爱频道5灯亮
+    C_FACTORY_LIGHT = "30"   # 恢复出厂设置灯亮
+    C_BUFFER_LIGHT = "32"   # 开机转圈缓冲灯亮

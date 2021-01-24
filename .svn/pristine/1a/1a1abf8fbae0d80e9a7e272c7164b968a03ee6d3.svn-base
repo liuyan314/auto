@@ -1,0 +1,28 @@
+#-*- coding:utf-8 -*-
+from aw import *
+
+'''
+1.设置手机常亮（连USB情况下）
+2.设置语言为英文
+3.设置手机连接usb时不弹提示窗
+4.重启手机
+5.设置应用市场在WiFi闲时不主动更新应用版本
+'''
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        initproject(SUBDUT1).setStayWake()  #设置手机连接USB常亮
+        initproject(SUBDUT1).setLanguage()  #设置手机语言为英文
+        initproject(SUBDUT1).setPromptWhenConnectToUsb()  # 设置手机连接USB时不弹窗
+        initproject(SUBDUT1).restartPhone()
+        initproject(SUBDUT1).setAutoUpdateAPPOverWLAN()
+        Common(SUBDUT1).goBackHome()
+
+    def test_step(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+if __name__ == "__main__":
+    unittest.main()

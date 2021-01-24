@@ -1,0 +1,136 @@
+from aw.common import Common
+from aw.luCiNet import *
+from logger import Logger
+from aw import Checkpoint
+
+
+class Libratone(Common):
+    def enterSpeakerByName(self):
+        '''
+        功能：在libratone应用中，通过设备名进入设备页面
+        :return:
+        '''
+        productName = LuCI_Net().getProductName().upper()  # LUCI接口获取的名字都是非全大写，强行转化成大写
+        Logger.info(("productName is: " + productName))
+        self.clickByText(productName)
+
+    '''
+    app register
+    '''
+
+    def appRegister(self, username, password):
+        # register new user
+        self.clickById(id=CONST.ID.HOME_EMAIL)
+        self.clickById(id=CONST.ID.REGISTER_NEW_USER_BTN)
+        # input email
+        self.inputText(CONST.ID.USER_EMAIL_EDITTEXT, username)
+        self.clickById(id=CONST.ID.REGISTER_NEW_USER_NEXT)
+        self.waitWidget(timeout=10, resourceId=CONST.ID.REGISTER_NEW_USER_PSED_HIDE_ICON)
+        # input password
+        self.inputText(id=CONST.ID.USER_PSWD_EDITTEXT, text=password)
+        self.clickById(id=CONST.ID.REGISTER_NEW_USER_NEXT)
+        # login
+        self.clickById(id=CONST.ID.REGISTER_NEW_USER_NEXT)
+        self.waitWidget(timeout=10, resourceId=CONST.ID.QUICK_GUIDE_CLOSE)
+        self.closeUpgradeBox()
+        self.clickWhenExist(resourceId=CONST.ID.QUICK_GUIDE_CLOSE)
+        self.closeUpgradeBox()
+        self.closeHints()
+
+    '''
+    app logout
+    '''
+
+    def appLogout(self):
+        # profile page
+        self.clickById(id=CONST.ID.MENU)
+        self.clickById(id=CONST.ID.MENU_PROFILE)
+        self.waitWidget(timeout=10, resourceId=CONST.ID.MYPROFILE_PHOTO_ICON)
+        # swipe to bottom
+        self.swipeToBottom()
+        self.clickById(id=CONST.ID.MYPROFILE_LOGOUT)
+        self.clickById(id=CONST.ID.ALERT_BTN_YES)
+        self.wait(2)
+
+    '''
+    app login
+    '''
+
+    def appLogin(self, username, password):
+        if self.exists(resourceId=CONST.ID.HOME_EMAIL):
+            # user login
+            self.clickById(id=CONST.ID.HOME_EMAIL)
+            # input email
+            # self.clickById(id=CONST.ID.USER_EMAIL_EDITTEXT, index=0)
+            self.inputText(CONST.ID.USER_EMAIL_EDITTEXT, username)
+            self.inputText(id=CONST.ID.USER_PSWD_EDITTEXT, text=password, index=1)
+            # login
+            self.clickById(id=CONST.ID.USER_LOGIN_BTN)
+            self.waitWidget(timeout=10, resourceId=CONST.ID.QUICK_GUIDE_CLOSE)
+            self.closeUpgradeBox()
+            self.clickWhenExist(resourceId=CONST.ID.QUICK_GUIDE_CLOSE)
+            self.clickWhenExist(resourceId=CONST.ID.QUICK_GUIDE_CLOSE)
+            self.closeUpgradeBox()
+            self.closeHints()
+
+    def closeHints(self):
+        self.waitWidget(timeout=10, resourceId=CONST.ID.POP_HINTS)
+        self.clickWhenExist(resourceId=CONST.ID.POP_HINTS)
+        self.wait(2)
+
+    def changePassword(self, current_password, new_password):
+        # profile page
+        self.clickById(id=CONST.ID.MENU)
+        self.clickById(id=CONST.ID.MENU_PROFILE)
+        self.waitWidget(timeout=10, resourceId=CONST.ID.MYPROFILE_PHOTO_ICON)
+        # swipe to bottom
+        self.swipeToBottom()
+        self.clickById(id=CONST.ID.MYPROFILE_CHANGE_PASSWORD)
+        self.inputText(id=CONST.ID.USER_EMAIL_EDITTEXT, text=current_password)
+        self.inputText(id=CONST.ID.USER_EMAIL_EDITTEXT, text=new_password, index=1)
+        self.clickById(id=CONST.ID.BOTTOM_BTN)
+        self.wait(2)
+        self.waitWidget(timeout=16, resourceId=CONST.ID.HOME_EMAIL)
+
+    def changePhotoImage(self):
+        self.clickById(id=CONST.ID.MENU)
+        self.clickById(id=CONST.ID.MENU_PROFILE)
+        self.waitWidget(timeout=10, resourceId=CONST.ID.MYPROFILE_PHOTO_ICON)
+        # click photo icon
+        self.clickById(id=CONST.ID.MYPROFILE_PHOTO_ICON)
+        # self.takeScreen_Part("actual", resourceId=CONST.ID.MYPROFILE_PHOTO_ICON)
+        self.clickById(id=CONST.ID.MYPROFILE_PHOTO_ICON)
+        # gallery
+        self.clickById(id=CONST.ID.MYPROFILE_PHOTO_GALLERY)
+        # MOTO Grally
+        self.waitWidget(timeout=5, resourceId=CONST.ID.ICON_MIME)
+        self.clickById(id=CONST.ID.ICON_MIME)
+        # click ok btn
+        self.clickById(id=CONST.ID.MYPROFILE_PHOTO_GALLERY_DONE)
+        # wait photo upload
+        self.wait(2)
+        self.waitWidgetNotExists(timeout=20, resourceId=CONST.ID.MYPROFILE_PHOTO_GALLERY_DONE_PROGRESS)
+        self.takeScreen_Part("actual", resourceId=CONST.ID.MYPROFILE_PHOTO_ICON)
+        self.wait(2)
+
+    def closeUpgradeBox(self):
+        if self.exists(resourceId=CONST.ID.UPGRADE_TITLE):
+            self.clickById(id=CONST.ID.UPGRADE_NO_UPGRADE)
+
+    def getProductColorImg(self, image_name, **keyargs):
+        layout_list = self.getLayout(**keyargs)
+        left = layout_list[0]
+        top = layout_list[1]
+        right = left + 200
+        bottom = top + 200
+        self.takeScreen_Part_Byxy(image_name, left, top, right, bottom)
+
+
+if __name__ == "__main__":
+    # Libratone().changePhotoImage()
+    # Checkpoint().checkImage("expected.png", "account_photo.png")
+    # Libratone().appLogin("qa@qq.com", "123456")
+    # print(Libratone().getWidgetInfo(resourceId=CONST.ID.MYPROFILE_PHOTO_ICON))
+    Common().takeScreen_Part("456_2k", resourceId="com.libratone:id/id_profile_registered_begin")
+    # Libratone().appLogin(Common(SUBDUT1).getLibratoneAccount("account1"),
+#                          Common(SUBDUT1).getLibratoneAccount("password1"))

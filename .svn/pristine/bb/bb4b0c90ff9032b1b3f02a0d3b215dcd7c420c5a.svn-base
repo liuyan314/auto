@@ -1,0 +1,54 @@
+#-*- coding:utf-8 -*-
+from aw import *
+
+'''
+用例标题:开关机20次
+预置条件：
+1.电源引线插入board板的1,2脚，放在2号继电器上（从0开始数）
+2.音箱开机（连接电源）
+测试步骤：
+1.音箱关机
+2.音箱开机
+预期结果：
+1.鸟灯不亮
+2.鸟灯亮起（不播歌情况下50%亮度）
+'''
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        print('返回主界面')
+        Common(SUBDUT1).goBackHome()
+
+    def step1(self):
+        print("步骤1.音箱关机")
+        Common(DUT).switchPowerMode()
+        Logger.info("Product has power off")
+        Common().wait(3)
+        getValue = Common(DUT).getLedBrightnessValue(port=CONST.SERIALNUMBER.COM15,timeout=5)
+        result = Checkpoint(DUT).checkLedBrightVaule(CONST.TOUCHLIGHTING.BIRD_ICON_NO_LIGHT,getValue,disc=15)
+        Logger.info("检测点1：音箱关机")
+        self.assertEqual(result, True)
+
+    def step2(self):
+        print("步骤2.音箱开机")
+        Common(DUT).switchPowerMode()
+        Logger.info("Product has power on")
+        Common().wait(10)
+        getValue = Common(DUT).getLedBrightnessValue(port=CONST.SERIALNUMBER.COM15, timeout=5)
+        result = Checkpoint(DUT).checkLedBrightVaule(CONST.TOUCHLIGHTING.BIRD_ICON_HALF_LIGHT, getValue, disc=100)
+        Logger.info("检测点1：音箱开机")
+        self.assertEqual(result, True)
+
+    def test_step(self):
+        for time in range(1,CONST.LOOP.LOOP20+1):
+            Logger.info("Run %d times"%time)
+            self.step1()
+            self.step2()
+
+    def tearDown(self):
+        print("收尾：返回主界面")
+        Common(SUBDUT1).goBackHome()
+        Common(DUT).setPowerOnWhenOff(port=CONST.SERIALNUMBER.COM15,timeout=5,disc=20)
+
+if __name__ == "__main__":
+    unittest.main()

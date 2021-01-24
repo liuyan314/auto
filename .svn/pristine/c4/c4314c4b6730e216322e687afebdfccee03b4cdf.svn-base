@@ -1,0 +1,65 @@
+#-*- coding:utf-8 -*-
+from aw import *
+
+'''
+用例标题:DLNA播放特殊处理声音，检测声音是否有异常（包括断续、杂音、忽高忽低、重音等）
+预置条件：
+1.已安装QQ音乐apk
+2.QQ音乐本地中已存在特殊处理的声音
+测试步骤：
+1.启动QQ音乐应用
+2.切换DLNA模式播放特殊处理的声音
+3.开始录音,检测录音文件是否存在异常
+预期结果：
+1.能正常启动应用
+3.播放声音无异常
+'''
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        print('返回主界面')
+        Common(SUBDUT1).goBackHome()
+
+    def step1(self):
+        print("步骤1.启动QQ音乐应用")
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC,timeOut=5)
+        result = Checkpoint(SUBDUT1).checkIfExist("检测点1:进入QQ音乐",text=CONST.TEXT.MUSIC_MUSEUM)
+        Logger.info("检测点1：能正常启动应用")
+        self.assertEqual(result, True)
+
+    def step2(self):
+        print("步骤2.切换DLNA模式播放特殊处理的声音")
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(5)    #wait switch DLNA!
+        QQMusic(SUBDUT1).switchPlayStatus()
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ARROWHEAD_ICON)  # click arrowhead on left top
+        Common(SUBDUT1).clickByText(text=CONST.TEXT.LOCAL_SONG)
+        Common(SUBDUT1).clickByText(text=CONST.MUSICNAME.SPECIAL_SONG)
+
+    def step3(self):
+        print("步骤3.开始录音,检测录音文件是否存在异常")
+        Common().saveRecodingSound(30)
+        Common().verifyRecordingFile()
+        Logger.info("检测点3：播放声音无异常")
+        result = Checkpoint().checkRecodingSound()
+        self.assertEqual(result, True)
+
+    def test_step(self):
+        self.step1()
+        self.step2()
+        self.step3()
+
+    def tearDown(self):
+        print("收尾:返回主界面")
+        Common(SUBDUT1).goBackHome()
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC, timeOut=5)
+        Common(SUBDUT1).clickWhenExist(text=CONST.TEXT.MINE)
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(2)  # wait switch DLNA!
+        QQMusic(SUBDUT1).switchPauseStatus()  # click pause button
+        Common(SUBDUT1).goBackHome()
+
+if __name__ == "__main__":
+    unittest.main()

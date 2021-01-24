@@ -1,0 +1,455 @@
+#-*- coding:utf-8 -*-
+'''
+Created on 2017.07
+
+@author: chubaoliang
+'''
+
+import os,json
+from uiautomator import Device
+from aw import CONST
+from logger import Logger
+
+LuCiNet_jar = os.path.abspath(os.path.join(os.path.dirname(__file__), "Luci_Interface.jar"))
+
+
+class LuCI_Net(object):
+
+    def getVolumeValue(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="volume",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" %(LuCI_path,ip,spaceName,Value,Type)).read().strip()
+        if "Result:" in content:
+            return int(content.split(":")[1])
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def setVolumeValue(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="volume",Value="40",Type="2"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: string type, volume Value, the default is 20, 0<=volume<=100
+        :param Type: get=1,set=2
+        """
+        Logger.info("Set volume:%s"%Value)
+        return os.system("java -jar %s %s %s %s %s" %(LuCI_path,ip,spaceName,Value,Type))
+
+    def getProductName(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="name",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        if "Result:" in content:
+            return str(content.split(":")[1])
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def setProductName(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="name",Value="AutoTest",Type="2"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is None
+        :param Type: get=1,set=2
+        """
+        return os.system("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type))
+
+    def getProductColor(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="getcolor",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        if "Result:" in content:
+            return str(content.split(":")[1])
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def setProductColor(self, LuCI_path=LuCiNet_jar, ip=CONST.IP.IP, spaceName="setcolor", Value=CONST.COLOR.STEEL_BLUE, Type="2"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is None
+        :param Type: get=1,set=2
+        """
+        return os.system("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type))
+
+    def getProductVersion(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="version",Value="0000",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0000
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        if "Result:" in content:
+            return str(content.split(":")[1])
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def getProductModuleName(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="modulename",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        if "Result:" in content:
+            moduleCode = str(content.split(":")[1])
+            if moduleCode == "300":
+                name = "Zipp"
+                return name
+            if moduleCode == "200":
+                name = "ZippMini"
+                return name
+            else:
+                Logger.info("moduleCode error.")
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def getProductSN(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="getsn",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        if "Result:" in content:
+            return str(content.split(":")[1])
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def getProductChangingStatus(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="getcs",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        if "Result:" in content:
+            result = str(content.split(":")[1])
+            if result == "0":
+                status = "noCharging"
+                return status
+            if result == "1":
+                status = "Charging"
+                return status
+            if result == "2":
+                status = "Finished"
+                return status
+            if result == "3":
+                status = "Error"
+                return status
+            else:
+                Logger.info("moduleCode error.")
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def setProductPlaybackControl(self, LuCI_path=LuCiNet_jar, ip=CONST.IP.IP, spaceName="playbackcontrol", Value=CONST.PLAYBACKCONTROL.PLAY, Type="2"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is None
+        :param Type: get=1,set=2
+        """
+        return os.system("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type))
+
+    def getProductPlaySource(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="playsource",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        if "Result:" in content:
+            result = content.split(":")[1]
+            result = result.split("\n")[0]
+            if result == "0":
+                status = "None"
+                Logger.info("playsource is None.")
+                return status
+            if result == "1":
+                status = "Airplay"
+                Logger.info("playsource is Airplay.")
+                return status
+            if result == "2":
+                status = "DLNA"
+                Logger.info("playsource is DLNA.")
+                return status
+            if result == "4":
+                status = "Spotify"
+                Logger.info("playsource is Spotify.")
+                return status
+            if result == "5":
+                status = "IAP"
+                Logger.info("playsource is IAP.")
+                return status
+            if result == "6":
+                status = "U disk"
+                Logger.info("playsource is U disk.")
+                return status
+            if result == "11":
+                status = "Multiroom Slave mode"
+                Logger.info("playsource is Multiroom Slave mode.")
+                return status
+            if result == "12":
+                status = "LineIn or BT in Multiroom Master mode"
+                Logger.info("playsource is LineIn or BT in Multiroom Master mode.")
+                return status
+            if result == "15":
+                status = "Preset channel"
+                Logger.info("playsource is Preset channel.")
+                return status
+            if result == "17":
+                status = "BT"
+                Logger.info("playsource is BT.")
+                return status
+            if result == "18":
+                status = "LineIN"
+                Logger.info("playsource is LineIN.")
+                return status
+            else:
+                Logger.info("result error.")
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def getPlaybackStatusOfPlaySourceWithBT(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="playsource",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        # print(content)
+        if "Result:" in content:
+            result = content.split(":")[1]
+            result1 = result.split("\n")[0]
+            BTPlayValue =content.split(":")[-1]
+            # print(BTPlayValue)
+            if result1 == "17":
+                if BTPlayValue =="8":
+                    status ="PLAYING"
+                    Logger.info("BT playback status is playing")
+                    return status
+                if BTPlayValue =="3":
+                    status ="PAUSE"
+                    Logger.info("BT playback status is pause")
+                    return status
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def getPlaybackStatusOfPlaySourceWithLineIN(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="playsource",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        # print(content)
+        if "Result:" in content:
+            result = content.split(":")[1]
+            result1 = result.split("\n")[0]
+            BTPlayValue =content.split(":")[-1]
+            # print(BTPlayValue)
+            if result1 == "18":
+                if BTPlayValue =="0":
+                    status ="MUTE"
+                    Logger.info("3.5 lineIN playback status is %s"%status)
+                    return status
+                if BTPlayValue =="1":
+                    status ="UNMUTE"
+                    Logger.info("3.5 lineIN playback status is %s"%status)
+                    return status
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def getProductPlaybacks(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="getplaybacks",Value="0",Type="1"):
+        """
+        explanation:Only get DLNA/Airplay/Udisk/IAP playback status,Not support BT/3.5 yet
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        if "Result:" in content:
+            result = content.split(":")[1]
+            if result == "0":
+                status = "Playing"
+                Logger.info("playsource is Playing")
+                return status
+            if result == "1":
+                status = "Stopped"
+                Logger.info("playsource is Stopped")
+                return status
+            if result == "2":
+                status = "Paused"
+                Logger.info("playsource is Paused")
+                return status
+            if result == "3":
+                status = "Transitioning"
+                Logger.info("playsource is Transitioning")
+                return status
+            if result == "4":
+                status = "Finished"
+                Logger.info("playsource is Finished")
+                return status
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def getProductBTCallStatus(self, LuCI_path=LuCiNet_jar, ip=CONST.IP.IP, spaceName="btcall", Value="0",
+                             Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        if "Result:" in content:
+            moduleCode = str(content.split(":")[1])
+            if moduleCode == "0":
+                status = "normal"
+                Logger.info("BT call status is %s" % status)
+                return status
+            if moduleCode == "1":
+                status = "btcall"
+                Logger.info("BT call status is %s" % status)
+                return status
+            else:
+                Logger.info("status error.")
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def getPowerMode(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="getpowermode",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        # print(content)
+        if "Result:" in content:
+            result = content.split(":")[1]
+            if result == "0":
+                status = "Active"
+                Logger.info("Power mode status is %s" % status)
+                return status
+            if result == "1":
+                status = "Ready"
+                Logger.info("Power mode status is %s" % status)
+                return status
+            if result == "2":
+                status = "Standy"
+                Logger.info("Power mode status is %s" % status)
+                return status
+            if result == "3":
+                status = "Power Off"
+                Logger.info("Power mode status is %s" % status)
+                return status
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def getPlayingSongNameFromUdisk(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="getudisksinfo",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        # print(content)
+        if "Result:" in content:
+            song_name = content.split("/")[-1].split(".")[0]
+            Logger.info("Song name is %s" % song_name)
+            return song_name
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def getUdiskSongId(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="udisksid",Value="0",Type="1"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: Value, the default is 0
+        :param Type: get=1,set=2
+        """
+        content = os.popen("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type)).read().strip()
+        # print(content)
+        if "Result:" in content:
+            song_conut = content.split(":")[1]   #获取当前U盘中播放的第几首歌，从1开始计数
+            Logger.info("Udisk is playing song's id is %s " % song_conut)
+            return song_conut
+        else:
+            Logger.info("params is error or DUT sn error")
+
+    def setUdiskSongIdToPlay(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="udisksid",Value="1",Type="2"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: The song id, for example：first song:1  second song:2  3rd song:3
+        :param Type: get=1,set=2
+        """
+        return os.system("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type))
+
+    def setLineinResume(self,LuCI_path=LuCiNet_jar,ip=CONST.IP.IP,spaceName="resumelinein",Value="0",Type="2"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: The default is 0(placeholder)
+        :param Type: get=1,set=2
+        """
+        return os.system("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type))
+
+    def setProductPlaybackControlWithBtLinein(self, LuCI_path=LuCiNet_jar, ip=CONST.IP.IP, spaceName="controlbtlinein", Value=CONST.PLAYBACKCONTROLWITHBTLINEIN.PLAY, Type="2"):
+        """
+        :param LuCI_path: the path of luci_net.jar
+        :param ip: speaker IP
+        :param spaceName: Corresponds to the MBID value, please refer document(LuciNet Interface.xlsx) in luCiNet folder
+        :param Value: The default is 0(placeholder)
+        :param Type: get=1,set=2
+        """
+        return os.system("java -jar %s %s %s %s %s" % (LuCI_path, ip, spaceName, Value, Type))
+
+
+# if __name__ == "__main__":
+#     LuCI_Net().getPlayingSongNameFromUdisk()
+    # LuCI_Net().setProductPlaybackControl(Value=CONST.PLAYBACKCONTROL.MUTE)
+    # LuCI_Net().setVolumeValue(Value="50")
+    # LuCI_Net().getVolumeValue()
+    # LuCI_Net().setLineinResume()

@@ -1,0 +1,2 @@
+title logcat
+adb -s 192.168.125.42 shell logcat >D:\workspace\chubaoliang_Py3.4\tools\logcat.txt

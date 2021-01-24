@@ -1,0 +1,18 @@
+connect "/c=10 /baud=115200"
+
+;###create log
+
+sprintf 'D:\workspace\Baseline_function\report\test_2017-11-06_17-59-08\log_UDISK_switch_source_20171106_184647.txt'
+filename = inputstr
+logopen filename 0 1 1
+logwrite 'Log start'#13#10
+
+sendln "logcat -v time"
+wait "pSH+>"
+
+;###closelog
+Logclose
+
+;###disconnect
+disconnect 
+closett

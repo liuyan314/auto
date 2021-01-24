@@ -1,0 +1,89 @@
+#-*- coding:utf-8 -*-
+from aw import *
+
+'''
+用例标题:在android端点击'上一首'或"下一首"
+预置条件：
+1.已安装QQ音乐apk
+2.QQ音乐本地中已存在3首歌曲
+测试步骤：
+1.启动QQ音乐应用
+2.切换DLNA模式播放第二首歌曲
+3.切换上一首歌曲
+4.切换下一首歌曲
+预期结果：
+1.能正常启动应用
+3.speaker能够切换至上一首
+4.speaker能够切换至下一首
+'''
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        print('返回主界面')
+        Common(SUBDUT1).goBackHome()
+        Common().createCatchLogcatBat()
+        Common().createCloseLogcatBat()
+        Common().runLogcatBat("catchLogcat.bat")
+
+    def step1(self):
+        print("步骤1.启动QQ音乐应用")
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC,timeOut=5)
+        result = Checkpoint(SUBDUT1).checkIfExist("检测点1:进入QQ音乐",text=CONST.TEXT.MUSIC_MUSEUM)
+        Logger.info("检测点1：能正常启动应用")
+        self.assertEqual(result, True)
+
+    def step2(self):
+        print("步骤2.切换DLNA模式播放第二首歌曲")
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(5)    #wait switch DLNA!
+        QQMusic(SUBDUT1).switchPlayStatus()
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ARROWHEAD_ICON)  # click arrowhead on left top
+        Common(SUBDUT1).clickByText(text=CONST.TEXT.LOCAL_SONG)
+        Common(SUBDUT1).clickByText(text=CONST.MUSICNAME.MIDDLE_SONG)
+
+    def step3(self):
+        print("步骤3.切换上一首歌曲")
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        Common().wait(10)  # play song for 10s
+        LuCI_Net().setProductPlaybackControl(Value=CONST.PLAYBACKCONTROL.PREV)  # choise previous song
+        Common().wait(10)  # play song for 10s
+        Common().closeLogcat("DUT")
+        songName = Common().getSongNameFromLogcat()
+        Logger.info("检测点3：音响音乐切换到上一首")
+        self.assertEqual(songName, CONST.MUSICNAME.PREVIOUS_SONG)
+
+    def step4(self):
+        print("步骤4.切换下一首歌曲")
+        Common().runLogcatBat("catchLogcat.bat")
+        Common(SUBDUT1).goBackHome()
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC, timeOut=5)
+        Common(SUBDUT1).clickByText(text=CONST.TEXT.LOCAL_SONG)
+        Common(SUBDUT1).clickByText(text=CONST.MUSICNAME.MIDDLE_SONG)
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        Common().wait(10)  # play song for 10s
+        LuCI_Net().setProductPlaybackControl(Value=CONST.PLAYBACKCONTROL.NEXT)  # choise previous song
+        Common().wait(10)  # play song for 10s
+        Common().closeLogcat("DUT")
+        songName = Common().getSongNameFromLogcat()
+        Logger.info("检测点4：音响音乐切换到下一首")
+        self.assertEqual(songName, CONST.MUSICNAME.NEXT_SONG)
+
+    def step5(self):
+        print("步骤5.点击暂停键,为收尾做准备")
+        QQMusic(SUBDUT1).switchPauseStatus()  # click pause button
+
+    def test_step(self):
+        self.step1()
+        self.step2()
+        self.step3()
+        self.step4()
+        self.step5()
+
+    def tearDown(self):
+        print("收尾:返回主界面")
+        Common(SUBDUT1).goBackHome()
+        Common().closeLogcat("DUT")
+
+if __name__ == "__main__":
+    unittest.main()

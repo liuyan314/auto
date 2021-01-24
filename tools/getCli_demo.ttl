@@ -1,0 +1,20 @@
+connect "/c=31 /baud=115200"
+
+;###create log
+
+gettime logstr "getCli.txt"
+getdir curdir
+sprintf '%s\%s' curdir logstr
+filename = inputstr
+logopen filename 0 1 1
+logwrite 'Log start'#13#10
+
+sendln "get %s"
+wait "pSH+>"
+
+;###closelog
+Logclose
+
+;###disconnect
+disconnect 
+closett

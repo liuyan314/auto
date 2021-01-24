@@ -1,0 +1,69 @@
+#-*- coding:utf-8 -*-
+from aw import *
+
+'''
+用例标题:BT播歌，切换到其他音源（DLNA）
+预置条件：
+1.已安装QQ音乐apk
+2.QQ音乐本地中已存在至少一首歌曲
+测试步骤：
+1.启动QQ音乐应用
+2.BT模式播放歌曲
+3.切换音源至DLNA
+预期结果：
+1.能正常启动应用
+2.音源为BT
+3.音源为DLNA
+'''
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        print('返回主界面')
+        Common(SUBDUT1).goBackHome()
+
+    def step1(self):
+        print("步骤1.启动QQ音乐应用")
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC, timeOut=5)
+        result = Checkpoint(SUBDUT1).checkIfExist("检测点1:进入QQ音乐", text=CONST.TEXT.MUSIC_MUSEUM)
+        Logger.info("检测点1：能正常启动应用")
+        self.assertEqual(result, True)
+
+    def step2(self):
+        print("步骤2.BT模式播放歌曲")
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchBtMode()
+        Common().wait(2)  # wait switch BT!
+        QQMusic(SUBDUT1).switchPlayStatus()
+        Common().wait(20)  # play song for 20s
+        source = LuCI_Net().getProductPlaySource()
+        Logger.info("检测点2：当前音源为BT")
+        self.assertEqual(source, "BT")
+
+    def step3(self):
+        print("步骤3.切换音源至DLNA")
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(5)  # wait switch DLNA!
+        QQMusic(SUBDUT1).switchPlayStatus()
+        Common().wait(20)  # play song for 20s
+        source = LuCI_Net().getProductPlaySource()
+        Logger.info("检测点3：当前音源为DLNA")
+        self.assertEqual(source, "DLNA")
+
+    def test_step(self):
+        self.step1()
+        self.step2()
+        self.step3()
+
+    def tearDown(self):
+        print("收尾：返回主界面")
+        Common(SUBDUT1).goBackHome()
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC, timeOut=5)
+        Common(SUBDUT1).clickWhenExist(text=CONST.TEXT.MINE)
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(2)  # wait switch DLNA!
+        QQMusic(SUBDUT1).switchPauseStatus()  # click pause button
+        Common(SUBDUT1).goBackHome()
+
+if __name__ == "__main__":
+    unittest.main()

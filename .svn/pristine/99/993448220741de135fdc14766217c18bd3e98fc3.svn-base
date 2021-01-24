@@ -1,0 +1,50 @@
+import os
+from aw.common import Common
+from aw.luCiNet import *
+from aw.checkpoint import *
+from uiautomator import Device
+from logger import Logger
+
+class QQMusic(Common):
+
+    def switchDlnaMode(self):
+        '''
+        功能：在QQ音乐中切换DLNA模式
+        :return:
+        '''
+        productName = LuCI_Net().getProductName()
+        Logger.info(("productName is: " + productName))
+        self.clickById("com.tencent.qqmusic:id/bra")   #HUAWEI & QQyinyue_647
+        self.swipeByRelativeCoordinates(0.5, 0.6, 0.5, 0.8)
+        self.clickByText(text=productName, screeScroll=True)
+        self.clickWhenExist(text="不再提示")
+        self.clickWhenExist(text="我知道了")
+
+    def switchBtMode(self):
+        '''
+        功能：在QQ音乐中切换BT模式
+        :return:
+        '''
+        localName = "本机"
+        Logger.info(("productName is: " + localName))
+        self.clickById("com.tencent.qqmusic:id/bra")  # HUAWEI & QQyinyue_647
+        self.swipeByRelativeCoordinates(0.5, 0.6, 0.5, 0.8)
+        self.clickByText(text=localName, screeScroll=True)
+
+    def switchPlayStatus(self):
+        '''
+        功能：在QQ音乐中如果当前播放状态是暂停，即点击播放按钮播放音乐
+        :return:
+        '''
+        self.clickWhenExist(description="播放")
+
+    def switchPauseStatus(self):
+        '''
+        功能：在QQ音乐中如果当前播放状态是播放，即点击播放按钮暂停音乐
+        :return:
+        '''
+        self.clickWhenExist(description="暂停")
+
+
+if __name__ == "__main__":
+    pass

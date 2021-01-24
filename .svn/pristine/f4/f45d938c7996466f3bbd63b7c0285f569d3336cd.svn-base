@@ -1,0 +1,18 @@
+connect "/c=10 /baud=115200"
+
+;###create log
+
+sprintf '%s\log_%s_%s.txt'
+filename = inputstr
+logopen filename 0 1 1
+logwrite 'Log start'#13#10
+
+sendln "logcat -v time"
+wait "pSH+>"
+
+;###closelog
+Logclose
+
+;###disconnect
+disconnect 
+closett

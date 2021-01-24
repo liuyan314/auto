@@ -1,0 +1,56 @@
+#-*- coding:utf-8 -*-
+from aw import *
+
+'''
+用例标题:U盘播歌，切换到其他音源（DLNA）
+预置条件：
+1.U盘下存在有效的歌曲
+测试步骤：
+1.切换音源至U盘，并播放一首歌曲
+2.切换音源至DLNA
+预期结果：
+1.音箱音源显示为U盘
+2.音源切换到DLNA
+'''
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        print('返回主界面')
+        Common(SUBDUT1).goBackHome()
+
+    def step1(self):
+        print("步骤1.切换音源至U盘，并播放一首歌曲")
+        Common(DUT).switchUdiskMode()
+        Common().wait(20)
+        result = LuCI_Net().getProductPlaySource()
+        Logger.info("检测点1：当前音源为U disk")
+        self.assertEqual(result, "U disk")
+
+    def step2(self):
+        print("步骤2.切换音源至DLNA")
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC, timeOut=5)
+        Common(SUBDUT1).clickWhenExist(text=CONST.TEXT.MINE)
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(2)  # wait switch DLNA!
+        QQMusic(SUBDUT1).switchPlayStatus()
+        Common().wait(5)
+        source = LuCI_Net().getProductPlaySource()
+        Logger.info("检测点2：当前音源切换到DLNA")
+        self.assertEqual(source, "DLNA")
+
+    def step3(self):
+        print("暂停播放,为收尾做准备")
+        QQMusic(SUBDUT1).switchPauseStatus()  # click pause button
+
+    def test_step(self):
+        self.step1()
+        self.step2()
+        self.step3()
+
+    def tearDown(self):
+        print("收尾：返回主界面")
+        Common(SUBDUT1).goBackHome()
+
+if __name__ == "__main__":
+    unittest.main()

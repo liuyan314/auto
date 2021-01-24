@@ -1,0 +1,66 @@
+#-*- coding:utf-8 -*-
+from aw import *
+
+'''
+用例标题:U盘播歌，切换'上一首'或"下一首"
+预置条件：
+1.U盘下存在有效的3首歌曲(与CONST.UDISKSONGNAME下的名字一致)
+测试步骤：
+1.切换音源至U盘，并播放一首歌曲
+2.切换下一首播放播放
+3.切换上一首播放播放
+预期结果：
+1.音箱音源显示为U盘
+2.U盘歌曲切换到下一首播放
+3.U盘歌曲切换到上一首播放
+'''
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        print('返回主界面')
+        Common(SUBDUT1).goBackHome()
+
+    def step1(self):
+        print("步骤1.切换音源至U盘，并播放一首歌曲")
+        Common(DUT).switchUdiskMode()
+        LuCI_Net().setUdiskSongIdToPlay(Value="2")  #play second song
+        Common().wait(20)
+        result = LuCI_Net().getProductPlaySource()
+        Logger.info("检测点1：当前音源为U disk")
+        self.assertEqual(result, "U disk")
+
+    def step2(self):
+        print("步骤2.切换下一首播放播放")
+        LuCI_Net().setProductPlaybackControl(Value=CONST.PLAYBACKCONTROL.NEXT)
+        song_name = LuCI_Net().getPlayingSongNameFromUdisk()
+        Logger.info("检测点2：U盘播放切换到下一首歌曲")
+        self.assertEqual(song_name, CONST.UDISKSONGNAME.THIRD_SONG)
+
+    def step3(self):
+        print("步骤3.切换上一首播放播放")
+        LuCI_Net().setUdiskSongIdToPlay(Value="2")  # play second song
+        Common().wait(5)
+        LuCI_Net().setProductPlaybackControl(Value=CONST.PLAYBACKCONTROL.PREV)
+        LuCI_Net().setProductPlaybackControl(Value=CONST.PLAYBACKCONTROL.PREV)  #double click can switch prev song
+        Common().wait(5)
+        song_name = LuCI_Net().getPlayingSongNameFromUdisk()
+        Logger.info("检测点3：U盘播放切换到上一首歌曲")
+        self.assertEqual(song_name, CONST.UDISKSONGNAME.FIRST_SONG)
+
+    def test_step(self):
+        self.step1()
+        self.step2()
+        self.step3()
+
+    def tearDown(self):
+        print("切换音源为DNLA")
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC, timeOut=5)
+        Common(SUBDUT1).clickWhenExist(text=CONST.TEXT.MINE)
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(2)  # wait switch DLNA!
+        QQMusic(SUBDUT1).switchPauseStatus()  # click pause button
+        Common(SUBDUT1).goBackHome()
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,19 @@
+{
+"device":{
+		"DUT":{"sn":"None"},
+		"SUBDUT1":{"sn":"None"}
+		},
+"log_config":{
+		"log":"on",
+		"pass":"off",
+		"screencap":"yes"
+		},
+"send_email":{
+        "send":"no",
+        "smtpserver":"smtp.163.com",
+        "user":"chubaoliang@163.com",
+        "password":"FAF15%ff1",
+        "sender":"y@gionee.com",
+        "receiver":["chubaoliang@163.com","chubaoliang2007@sina.com"]
+        }
+}

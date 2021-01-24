@@ -1,0 +1,16 @@
+test\AUXIN\AUXIN_adjust_volume.py
+test\AUXIN\AUXIN_mute_unmute.py
+test\AUXIN\AUXIN_switch_source.py
+test\DLNA\DLNA_adjust_volume.py
+test\DLNA\DLNA_play_pause_music.py
+test\DLNA\DLNA_previous_next_song.py
+test\DLNA\DLNA_switch_source.py
+test\BT\BT_adjust_volume.py
+test\BT\BT_play_and_pause.py
+test\BT\BT_previous_next_song.py
+test\BT\BT_switch_source.py
+test\UDISK\UDISK_adjust_volume.py
+test\UDISK\UDISK_play_pause_music.py
+test\UDISK\UDISK_playingmusic.py
+test\UDISK\UDISK_previous_next_song.py
+test\UDISK\UDISK_switch_source.py

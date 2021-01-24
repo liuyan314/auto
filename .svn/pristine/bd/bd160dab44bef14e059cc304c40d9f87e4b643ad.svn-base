@@ -1,0 +1,89 @@
+import os,time,json
+from aw.common import Common
+from uiautomator import Device
+from logger import Logger
+from aw.CONST import *
+
+rootPath = os.path.abspath(os.path.join(os.path.dirname(__file__),os.pardir,os.pardir))
+
+def config():
+    jsonFile="project.json"
+    with open(rootPath+"\\"+jsonFile,"r") as f:
+        config = json.load(f)
+    return config
+
+# DUT = config()['device']['DUT']["sn"]
+# SUBDUT1 = config()['device']['SUBDUT1']["sn"]
+
+class initproject(Common):
+
+    def __init__(self,sn = config()['device']['SUBDUT1']["sn"]):
+        global d
+        d = Device(sn)
+        self.sn=sn
+
+    def setStayWake(self,value="open"):
+        '''
+        功能：设置手机常亮
+        参数：open：打开，close：关闭
+        '''
+        if value =="open":
+            Logger.info("switch staywake button to open")
+            os.system("adb -s %s shell settings put global stay_on_while_plugged_in 3"%self.sn)
+        elif value =="close":
+            Logger.info("switch staywake button to close")
+            os.system("adb -s %s shell settings put global stay_on_while_plugged_in 0"%self.sn)
+        else:
+            raise TypeError("<%s> is an invalid parameter"%value)
+
+    def setLanguage(self,value="EN-US"):
+        '''
+        功能：设置手机语言(默认为英文(en-US))
+        参数：value:默认语言值，英文：en-US，中文：zh-Hans-CN
+        '''
+        language_dict = {
+            "EN-US":"en-US",
+            "CHN": "zh-Hans-CN",
+        }
+        if value in language_dict:
+            Logger.info("set language is <%s>"%value)
+            os.system("adb -s %s shell settings put system system_locales %s"%(self.sn,language_dict[value]))
+        else:
+            raise TypeError("<%s> is an invalid parameter"%value)
+
+    def setAutoUpdateAPPOverWLAN(self,status="true"):
+        '''
+        功能：设置华为应用市场中WiFi闲时更新应用开关
+        参数：status：当前开关的状态，并非是期望值，取值true或者false，例如：status="true",则判断如果开关是开着的，则关闭，反之亦然。
+        '''
+        Common(self.sn).startActivity(PKGNAME.HWAPPMARKET)
+        Common(self.sn).clickWhenExist(text="SKIP")
+        Common(self.sn).clickWhenExist(text="管理")
+        Common(self.sn).clickWhenExist(text="Update manager")
+        Common(self.sn).switchWidget(status,"com.huawei.appmarket:id/pre_download_switchBtn")
+
+    def setPromptWhenConnectToUsb(self,status="close"):
+        '''
+        功能：设置华为手机连接usb后的弹窗（默认弹窗，测试时期望去掉）
+        参数：status：close:关闭，open：开启
+        '''
+        value_dict = {
+            "open": "1",
+            "close": "0",
+        }
+        if status in value_dict:
+            Logger.info("set button status is <%s>" % status)
+            os.system("adb -s %s shell settings put secure usb_conn_prompt %s" % (self.sn, value_dict[status]))
+        else:
+            raise TypeError("<%s> is an invalid parameter" % status)
+
+    def restartPhone(self):
+        '''
+        功能：重启手机
+        '''
+        os.system("adb -s %s reboot" % self.sn)
+        Common(self.sn).wait(50)
+        Common(self.sn).unlockScreen()
+
+# if __name__ == "__main__":
+#     initproject().setStayWake()

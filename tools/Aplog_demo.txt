@@ -1,0 +1,2 @@
+title Aplog
+adb -s %s logcat >%s\%s

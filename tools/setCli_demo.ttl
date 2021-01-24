@@ -1,0 +1,5 @@
+connect "/c=31 /baud=115200"
+
+sendln "%s"
+wait "pSH+>"
+closett

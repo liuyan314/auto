@@ -1,0 +1,88 @@
+# -*- coding:utf-8 -*-
+
+from aw import *
+
+record = time.strftime("%Y%m%d%H%M%S")
+# the email use current time
+email = record + "@qq.com"
+password = "123456"
+new_password = "1234567"
+
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        print('返回主界面')
+        Common(SUBDUT1).goBackHome()
+        Common(SUBDUT1).clearUserData(CONST.PKGNAME.LIBRATONE_PACKAGE)
+
+    def tearDown(self):
+        print("返回主界面")
+        Common(SUBDUT1).goBackHome()
+
+    def step1(self):
+        # start app
+        print('启动app')
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.LIBRATONE, timeOut=5)
+        Common(SUBDUT1).waitWidget(resourceId=CONST.ID.HOME_EMAIL)
+
+    def step2(self):
+        print('注册新用户-->登出-->新用户登录')
+        # if region is China,Wechat and Email is display,register and login
+        self.assertTrue(Common(SUBDUT1).exists(resourceId=CONST.ID.HOME_EMAIL))
+        self.assertTrue(Common(SUBDUT1).exists(resourceId=CONST.ID.HOME_WECHAT))
+        Libratone(SUBDUT1).appRegister(email, password)
+        self.assertTrue(Common(SUBDUT1).exists(resourceId=CONST.ID.SOUNDSPACES))
+        Libratone(SUBDUT1).appLogout()
+        Libratone(SUBDUT1).appLogin(email, password)
+        self.assertTrue(Common(SUBDUT1).exists(resourceId=CONST.ID.SOUNDSPACES))
+
+    def step3(self):
+        print('修改用户密码再登录')
+        # change password and login
+        Libratone(SUBDUT1).changePassword(password, new_password)
+        self.assertTrue(Common(SUBDUT1).exists(resourceId=CONST.ID.HOME_EMAIL))
+        Libratone(SUBDUT1).appLogin(email, new_password)
+        self.assertTrue(Common(SUBDUT1).exists(resourceId=CONST.ID.SOUNDSPACES))
+
+    def step4(self):
+        print('修改用户头像')
+        Libratone(SUBDUT1).changePhotoImage()
+        self.assertTrue(Checkpoint(SUBDUT1).checkImageNotExists("actual.png", "account_photo.png"))
+
+    def step5(self):
+        print('修改First name 和 Last name')
+        Common(SUBDUT1).inputText(id=CONST.ID.MYPROFILE_FITSTNAME_EDITTEXT, text="A1")
+        Common(SUBDUT1).inputText(CONST.ID.MYPROFILE_LASTTNAME_EDITTEXT, "B2")
+        Common(SUBDUT1).clickById(id=CONST.ID.MYPROFILE_SAVE_CONTAINER)
+        Common(SUBDUT1).waitWidget(timeout=20, resourceId=CONST.ID.MYPROFILE_USER_NAME)
+        Common(SUBDUT1).clickById(id=CONST.ID.MYPROFILE_PHOTO_ICON)
+        Common(SUBDUT1).inputText(CONST.ID.MYPROFILE_FITSTNAME_EDITTEXT, "FN")
+        Common(SUBDUT1).inputText(CONST.ID.MYPROFILE_LASTTNAME_EDITTEXT, "LN")
+        Common(SUBDUT1).clickById(id=CONST.ID.MYPROFILE_SAVE_CONTAINER)
+        Common(SUBDUT1).waitWidget(timeout=20, resourceId=CONST.ID.MYPROFILE_USER_NAME)
+        self.assertEqual("LN FN", Common(SUBDUT1).getTextValueWithID(id=CONST.ID.MYPROFILE_USER_NAME))
+
+    def step6(self):
+        print('发送反馈邮件')
+        Common(SUBDUT1).clickById(id=CONST.ID.MENU)
+        Common(SUBDUT1).clickById(id=CONST.ID.MENU)
+        Common(SUBDUT1).clickById(id=CONST.ID.MENU_SUPPORT)
+        Common(SUBDUT1).waitWidget(timeout=20, resourceId=CONST.ID.SUPPORT_CATEGORY_NAME)
+        Common(SUBDUT1).clickById(id=CONST.ID.SUPPORT_CATEGORY_NAME, index=4)
+        Common(SUBDUT1).inputText(id=CONST.ID.USER_EMAIL_EDITTEXT, text="456", index=2)
+        Common(SUBDUT1).inputText(id=CONST.ID.SUPPORT_CONTACT_US_MSG, text="789")
+        Common(SUBDUT1).clickById(id=CONST.ID.SUPPORT_CONTACT_US_BTN)
+        Common(SUBDUT1).waitWidget(timeout=20, resourceId=CONST.ID.SUPPORT_CONTACT_US_SENT_MSG_TEXT)
+        self.assertTrue(Common(SUBDUT1).exists(resourceId=CONST.ID.SUPPORT_CONTACT_US_SENT_MSG_TEXT))
+        Common(SUBDUT1).clickById(id=CONST.ID.SUPPORT_CONTACT_US_SENT_MSG_DONE)
+
+    def test_Login_Email(self):
+        self.step1()
+        self.step2()
+        self.step3()
+        self.step4()
+        self.step5()
+        self.step6()
+
+if __name__ == "__main__":
+    unittest.main()

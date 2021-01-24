@@ -1,0 +1,85 @@
+#-*- coding:utf-8 -*-
+from aw import *
+from datetime import datetime
+
+'''
+用例标题:蓝牙播歌调整音量大小
+预置条件：
+1.已安装QQ音乐apk
+2.QQ音乐本地中已存在3首歌曲
+3.手机已与蓝牙设备配对
+测试步骤：
+1.启动QQ音乐应用
+2.蓝牙播放歌曲10秒
+3.切换上一首歌曲
+4.切换下一首歌曲
+预期结果：
+1.能正常启动应用
+2.播放歌曲音源为BT
+3.成功切换上一首歌曲
+4.成功切换下一首歌曲
+
+'''
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        print('返回主界面')
+        Common(SUBDUT1).goBackHome()
+
+    def step1(self):
+        print("步骤1.启动QQ音乐应用")
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC,timeOut=5)
+        result = Checkpoint(SUBDUT1).checkIfExist("检测点1:进入QQ音乐",text=CONST.TEXT.MUSIC_MUSEUM)
+        Logger.info("检测点1：能正常启动应用")
+        self.assertEqual(result, True)
+
+    def step2(self):
+        print("步骤2.蓝牙播放第二首歌曲10秒")
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchBtMode()
+        QQMusic(SUBDUT1).switchPlayStatus()  # click play button
+        Common().wait(5)  # wait switch BT!
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ARROWHEAD_ICON)  # click arrowhead on left top
+        Common(SUBDUT1).clickByText(text=CONST.TEXT.LOCAL_SONG)
+        Common(SUBDUT1).clickByText(text=CONST.MUSICNAME.MIDDLE_SONG)
+        source = LuCI_Net().getProductPlaySource()
+        Logger.info("检测点2：当前音源切换到BT")
+        self.assertEqual(source, "BT")
+
+    def step3(self):
+        print("步骤3.切换上一首歌曲")
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        Common().wait(5)  # play song for 5s
+        LuCI_Net().setProductPlaybackControlWithBtLinein(Value=CONST.PLAYBACKCONTROLWITHBTLINEIN.PREV)  # choise previous song
+        Common().wait(5)  # play song for 5s
+        result = Checkpoint(SUBDUT1).checkIfExist("检测点3：音响音乐切换到上一首", text="暧昧")
+        Logger.info("检测点3：音响音乐切换到上一首")
+        self.assertEqual(result, True)
+
+    def step4(self):
+        print("步骤4.切换下一首歌曲")
+        LuCI_Net().setProductPlaybackControlWithBtLinein(Value=CONST.PLAYBACKCONTROLWITHBTLINEIN.NEXT)  # choise next song
+        Common().wait(5)  # play song for 5s
+        result = Checkpoint(SUBDUT1).checkIfExist("检测点4：音响音乐切换到下一首", text="你还要我怎样")
+        Logger.info("检测点4：音响音乐切换到下一首")
+        self.assertEqual(result, True)
+
+    def test_step(self):
+        self.step1()
+        self.step2()
+        self.step3()
+        self.step4()
+
+    def tearDown(self):
+        print("收尾:返回主界面，切换音源为DNLA")
+        Common(SUBDUT1).goBackHome()
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC, timeOut=5)
+        Common(SUBDUT1).clickWhenExist(text=CONST.TEXT.MINE)
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(2)  # wait switch DLNA!
+        QQMusic(SUBDUT1).switchPauseStatus()  # click pause button
+        Common(SUBDUT1).goBackHome()
+
+if __name__ == "__main__":
+    unittest.main()

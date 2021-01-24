@@ -1,0 +1,96 @@
+# -*- coding:utf-8 -*-
+
+from aw import *
+
+product_name = config()['libratone_product']['register_product_name']
+
+
+class TestScript(unittest.TestCase):
+    product_sn = None
+
+    def setUp(self):
+        print('返回主界面')
+        Common(SUBDUT1).goBackHome()
+        Common(SUBDUT1).forceCloseApp(CONST.PKGNAME.LIBRATONE_PACKAGE)
+
+    def tearDown(self):
+        print("返回主界面")
+        Common(SUBDUT1).goBackHome()
+
+    def step1(self):
+        # start app
+        print('启动app')
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.LIBRATONE, timeOut=5)
+        username = config()['libratone_account']['account1']
+        password = config()['libratone_account']['password1']
+        # 如果没有登录就去登录
+        Libratone().appLogin(username, password)
+
+    def step2(self):
+        print('先去获取product的颜色和SN')
+        Common(SUBDUT1).clickById(id=CONST.ID.EXTEND_ICON)
+        Common(SUBDUT1).clickByText(text=product_name.upper())
+        Common(SUBDUT1).wait(2)
+        Common(SUBDUT1).clickById(id=CONST.ID.PRODUCT_SETTING)
+        Common(SUBDUT1).wait(2)
+        # 在speaker detail 页面获取音响的部分颜色图片，用于和注册后的音响颜色对比
+        Libratone().getProductColorImg("expected", resourceId=CONST.ID.PRODUCT_SETTING_MODE_CONTAINER)
+        Common(SUBDUT1).swipeToBottom()
+        # 获取音响的序列号，用于和注册后的序列号对比
+        self.product_sn = Common(SUBDUT1).getTextValueWithID(id=CONST.ID.PRODUCT_SETTING_SN)
+        Common(SUBDUT1).clickById(id=CONST.ID.MENU)
+
+    def step3(self):
+        print('注册音响并检查音响信息')
+        # profile page
+        Common(SUBDUT1).clickById(id=CONST.ID.MENU)
+        Common(SUBDUT1).clickById(id=CONST.ID.MENU_PROFILE)
+        Common(SUBDUT1).waitWidget(timeout=15, resourceId=CONST.ID.MYPROFILE_PHOTO_ICON)
+        # swipe to bottom
+        Common(SUBDUT1).swipeToBottom()
+        Common(SUBDUT1).clickById(id=CONST.ID.MYPROFILE_REGISTER_PRODUCT)
+        Common(SUBDUT1).waitWidget(timeout=15, resourceId=CONST.ID.MYPROFILE_REGISTER_PRODUCT_BEGIN)
+        # 验证注册页面文字
+        self.assertEqual(CONST.TEXT.MYPROFILE_REGISTER_PRODUCT_TIP,
+                         Common(SUBDUT1).getTextValueWithID(id=CONST.ID.MYPROFILE_REGISTER_PRODUCT_TIP))
+        self.assertEqual(CONST.TEXT.MYPROFILE_REGISTER_PRODUCT_BEGIN,
+                         Common(SUBDUT1).getTextValueWithID(id=CONST.ID.MYPROFILE_REGISTER_PRODUCT_BEGIN))
+        # 验证注册页面有注册按钮（图片验证，80%即认为相同）
+        Common(SUBDUT1).takeScreen_Part("actual", resourceId=CONST.ID.MYPROFILE_REGISTER_PRODUCT_BEGIN)
+        self.assertTrue(Checkpoint(SUBDUT1).checkImageByHist(stdImage="register_product.png", cmpImage="actual.png",
+                                                             similar=0.8))
+        Common(SUBDUT1).clickById(id=CONST.ID.MYPROFILE_REGISTER_PRODUCT_BEGIN)
+        Common(SUBDUT1).clickByText(text=product_name.upper())
+        Common(SUBDUT1).wait(CONST.TOAST.TOAST_TIME)
+        Common(SUBDUT1).waitWidget(timeout=20, resourceId=CONST.ID.MYPROFILE_REGISTER_PRODUCT_IMAGE)
+        self.assertTrue(Common(SUBDUT1).exists(resourceId=CONST.ID.MYPROFILE_REGISTER_PRODUCT_IMAGE))
+        self.assertEqual(product_name.upper(), Common(SUBDUT1).getTextValueWithID(id=CONST.ID.LIBRATONE_TITLE))
+        # 验证注册后的音响颜色和原本颜色一致（图片验证，80%即认为相同）
+        Libratone().getProductColorImg(image_name="actual", resourceId=CONST.ID.MYPROFILE_REGISTER_PRODUCT_TEXT)
+        self.assertTrue(Checkpoint(SUBDUT1).checkImageByHist(stdImage="expected.png", cmpImage="actual.png",
+                                                             similar=0.8))
+        # 验证注册后的音响序列号没有一致
+        self.assertEqual(self.product_sn, (
+            (Common(SUBDUT1).getTextValueWithID(id=CONST.ID.MYPROFILE_REGISTER_PRODUCT_DETAIL_SN)).split(":")[
+                1].strip()))
+
+    def step4(self):
+        print('注销音响')
+        Common(SUBDUT1).clickById(id=CONST.ID.MYPROFILE_UNREGISTER_PRODUCT_BTN)
+        self.assertTrue(Common(SUBDUT1).exists(resourceId=CONST.ID.ALERT_WIDGET))
+        Common(SUBDUT1).clickById(id=CONST.ID.ALERT_BTN_NO)
+        self.assertTrue(Common(SUBDUT1).exists(resourceId=CONST.ID.MYPROFILE_REGISTER_PRODUCT_IMAGE))
+        Common(SUBDUT1).clickById(id=CONST.ID.MYPROFILE_UNREGISTER_PRODUCT_BTN)
+        Common(SUBDUT1).clickById(id=CONST.ID.ALERT_BTN_YES)
+        Common(SUBDUT1).waitWidget(timeout=15, resourceId=CONST.ID.MYPROFILE_REGISTER_PRODUCT_BEGIN)
+        self.assertFalse(Common(SUBDUT1).exists(text=product_name.upper()))
+
+    def test_Register_Product(self):
+        self.step1()
+        self.step2()
+        self.step3()
+        self.step4()
+
+
+if __name__ == "__main__":
+    unittest.main()

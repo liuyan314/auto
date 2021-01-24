@@ -1,0 +1,4 @@
+@echo off
+cd D:\workspace\chubaoliang_Py3.4\tools
+CMDOW "logcat" /cls    
+exit

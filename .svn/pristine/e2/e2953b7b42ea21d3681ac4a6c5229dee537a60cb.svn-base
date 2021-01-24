@@ -1,0 +1,68 @@
+#-*- coding:utf-8 -*-
+from aw import *
+
+'''
+用例标题:租赁耳机激活业务
+预置条件：
+1.Onear电源引线插入board板的1,2脚，放在3号继电器上（从0开始数）
+2.耳机处于关机状态（连接电源）
+3.手机进入libratone应用首页（租赁版）
+测试步骤：
+1.耳机开机
+2.点击激活
+3.耳机开机
+预期结果：
+1.  耳机开机后有消息窗口弹出
+2.  点击点击或，显示激活成功
+3.  耳机关机
+'''
+
+class TestScript(unittest.TestCase):
+
+    activaty_fail_count = 0
+
+    def setUp(self):
+        print('手机进入libratone界面')
+        Common(SUBDUT1).goBackHome()
+        Common(SUBDUT1).startActivity(CONST.PKGNAME.LIBRATONE,timeOut=5)
+        result = Checkpoint(SUBDUT1).checkIfExist("检测点1:进入Libratone应用", text=CONST.TEXT.SOUNDSPACES,timeout=8)
+        Logger.info("检测点1：能正常启动应用")
+        self.assertEqual(result, True)
+
+    def step1(self):
+        Logger.info("步骤1.耳机开机")
+        Common().switchPowerMode(bat="Power_onEar.bat",timeOut=3)
+        Logger.info("Onear has been powered on")
+        Common().wait(1)
+        Logger.info("检测点1：耳机开机后app端有激活消息弹出")
+        Checkpoint(SUBDUT1).checkIfExist(timeout=40,text="ACTIVATE")
+
+    def step2(self):
+        Logger.info("步骤2.点击激活")
+        Common(SUBDUT1).clickWhenExist(text = "ACTIVATE")
+        Common(SUBDUT1).wait(5)
+        res = Checkpoint(SUBDUT1).checkTextExistByIdWithFuzzy(id="com.libratone:id/text_alert_info",text="Activation successed",timeout=10)
+        if not res :
+            self.activaty_fail_count +=1
+            Logger.info("==========第%d次失败=========="%self.activaty_fail_count)
+        Common(SUBDUT1).clickByText("OK, I KNEW IT")
+
+    def step3(self):
+        Logger.info("步骤3.耳机关机")
+        Common().switchPowerMode(bat="Power_onEar.bat", timeOut=3)
+        Common(SUBDUT1).wait(5)
+
+    def test_step(self):
+        for time in range(1,CONST.LOOP.LOOP100+1):
+            Logger.info("Run %d times"%time)
+            self.step1()
+            self.step2()
+            self.step3()
+
+    def tearDown(self):
+        print("收尾：返回主界面")
+        Common(SUBDUT1).goBackHome()
+        Logger.info("==========累计激活失败%d次==========" % self.activaty_fail_count)
+
+if __name__ == "__main__":
+    unittest.main()

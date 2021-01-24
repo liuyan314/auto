@@ -1,0 +1,4 @@
+@echo off
+cd %s
+CMDOW "logcat" /cls    
+exit

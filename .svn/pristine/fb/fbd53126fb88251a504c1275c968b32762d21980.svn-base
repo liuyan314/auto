@@ -1,0 +1,29 @@
+#-*- coding:utf-8 -*-
+from aw import *
+'''
+用例标题:
+测试步骤：
+1.启动libratone应用。
+预期结果：
+1.能正常启动应用。
+'''
+
+######################################
+
+######################################
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        Common(DUT).goBackHome()
+        print('返回主界面')
+    def test_step(self):
+        Common(DUT).startActivity(activity_name=CONST.PKGNAME.LIBRATONE,timeOut=3)
+        result = Checkpoint(DUT).checkIfExist("检测点1:进入libratone应用",text="SOUNDSPACES")
+        self.assertEqual(result, True)
+        Common(DUT).clickById(id="com.libratone:id/ivSmallSSEmpty")
+            
+    def tearDown(self):
+        Common(DUT).goBackHome()
+        Common(DUT).clearRecentApp()
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,88 @@
+#-*- coding:utf-8 -*-
+from aw import *
+
+'''
+用例标题:AUXIN播歌，调节
+预置条件：
+1.已安装QQ音乐apk
+2.QQ音乐本地中已存在至少一首歌曲
+3.关闭蓝牙
+测试步骤：
+1.启动QQ音乐应用
+2.AUXIN模式播放歌曲
+3.增大音量
+4.减小音量
+预期结果：
+1.能正常启动应用
+2.音源为LINEIN
+3.媒体音量增加
+4.媒体音量减小
+'''
+
+class TestScript(unittest.TestCase):
+    def setUp(self):
+        print('关闭蓝牙，返回主界面')
+        Setting(SUBDUT1).switchBT("关闭")
+        Common(SUBDUT1).goBackHome()
+
+    def step1(self):
+        print("步骤1.启动QQ音乐应用")
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC, timeOut=5)
+        result = Checkpoint(SUBDUT1).checkIfExist("检测点1:进入QQ音乐", text=CONST.TEXT.MUSIC_MUSEUM)
+        Logger.info("检测点1：能正常启动应用")
+        self.assertEqual(result, True)
+
+    def step2(self):
+        print("步骤2.AUXIN模式播放歌曲")
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(2)  # wait switch DLNA!
+        QQMusic(SUBDUT1).switchPlayStatus()
+        Common().wait(2)
+        Common().switchLineinMode()
+        Common().wait(2)
+        QQMusic(SUBDUT1).switchPlayStatus()  # click play song button
+        Common().wait(10)
+        source = LuCI_Net().getProductPlaySource()
+        Logger.info("检测点2：音源为LINEIN")
+        self.assertEqual(source, "LineIN")
+
+    def step3(self):
+        print("步骤3.增大音量")
+        adjust_volume = 30
+        beforeVolume = LuCI_Net().getVolumeValue()
+        LuCI_Net().setVolumeValue(Value=beforeVolume + adjust_volume)
+        afterVolume = LuCI_Net().getVolumeValue()
+        Logger.info("检测点3：媒体音量增加")
+        self.assertGreater(afterVolume, beforeVolume)
+
+    def step4(self):
+        print("步骤4.减小音量")
+        adjust_volume = 20
+        beforeVolume = LuCI_Net().getVolumeValue()
+        LuCI_Net().setVolumeValue(Value=beforeVolume - adjust_volume)
+        afterVolume = LuCI_Net().getVolumeValue()
+        Logger.info("检测点4：媒体音量减小")
+        self.assertLessEqual(afterVolume, beforeVolume)
+
+    def test_step(self):
+        self.step1()
+        self.step2()
+        self.step3()
+        self.step4()
+
+    def tearDown(self):
+        print("收尾：返回主界面")
+        LuCI_Net().setVolumeValue()
+        Setting(SUBDUT1).switchBT("开启")
+        Common(SUBDUT1).goBackHome()
+        Common(SUBDUT1).startActivity(activity_name=CONST.PKGNAME.QQMUSIC, timeOut=5)
+        Common(SUBDUT1).clickWhenExist(text=CONST.TEXT.MINE)
+        Common(SUBDUT1).clickById(id=CONST.ID.QQMUSIC_PLAY_SONG_ICON)  # click local song icon(left-bottom)
+        QQMusic(SUBDUT1).switchDlnaMode()
+        Common().wait(2)  # wait switch DLNA!
+        QQMusic(SUBDUT1).switchPauseStatus()
+        Common(SUBDUT1).goBackHome()
+
+if __name__ == "__main__":
+    unittest.main()

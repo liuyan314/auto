@@ -1,0 +1,2 @@
+from test.egg.app.release.ED_17928_Login_with_email_address import *
+from test.egg.app.release.ED_16617_Register_And_Unregister_Speaker import *

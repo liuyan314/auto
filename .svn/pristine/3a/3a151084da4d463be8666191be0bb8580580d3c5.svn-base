@@ -1,0 +1,4 @@
+connect "/c=5 /baud=115200"
+
+sendln "relay 1 on 3000 off 1000 cnt 1"
+closett
